@@ -1,0 +1,1 @@
+package com.eventstream.entity;

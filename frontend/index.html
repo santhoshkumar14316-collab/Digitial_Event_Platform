@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StreamPulse | Digital Event Live Streaming & Ticketing Platform</title>
+  <meta name="description" content="Watch high quality live virtual events, concerts, webinars, and tech conferences. Book your tickets instantly.">
+  
+  <!-- FontAwesome Icons & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="#" class="brand-logo" id="navBrand">
+      <div class="brand-icon"><i class="fa-solid fa-play"></i></div>
+      StreamPulse
+    </a>
+
+    <ul class="nav-links">
+      <li><a class="nav-link active" id="navHome"><i class="fa-solid fa-house"></i> Home</a></li>
+      <li><a class="nav-link" id="navEvents"><i class="fa-solid fa-calendar-days"></i> Browse Events</a></li>
+      <li id="navMyTicketsContainer" style="display: none;">
+        <a class="nav-link" id="navMyTickets"><i class="fa-solid fa-ticket"></i> My Tickets</a>
+      </li>
+      <li id="navOrganizerContainer" style="display: none;">
+        <a class="nav-link" id="navOrganizer"><i class="fa-solid fa-chart-line"></i> Organizer Dashboard</a>
+      </li>
+    </ul>
+
+    <div class="nav-actions" id="navActions">
+      <!-- Unauthenticated State -->
+      <button class="btn btn-secondary btn-sm" id="btnOpenLogin"><i class="fa-solid fa-right-to-bracket"></i> Sign In</button>
+      <button class="btn btn-primary btn-sm" id="btnOpenRegister"><i class="fa-solid fa-user-plus"></i> Register</button>
+    </div>
+  </nav>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Main Content Wrapper -->
+  <main class="main-container">
+
+    <!-- View 1: Home / Events Overview -->
+    <div id="viewHome" class="app-view">
+      <!-- Hero Banner -->
+      <section class="hero-section glass-panel">
+        <div class="hero-content">
+          <div class="live-badge-glow">
+            <span class="pulse-dot"></span> LIVE STREAMING PLATFORM
+          </div>
+          <h1>Experience <span class="hero-highlight">Live Events</span> From Anywhere</h1>
+          <p class="hero-description">
+            Stream high-definition virtual concerts, tech summits, and exclusive masterclasses directly to your browser with instant digital ticket validation.
+          </p>
+          <div style="display: flex; gap: 1rem;">
+            <button class="btn btn-primary" id="btnExploreHero"><i class="fa-solid fa-compass"></i> Explore Upcoming Events</button>
+            <button class="btn btn-secondary" id="btnHostEventHero"><i class="fa-solid fa-video"></i> Host an Event</button>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat-item">
+              <h3>100%</h3>
+              <p>Verified Access</p>
+            </div>
+            <div class="stat-item">
+              <h3>4K</h3>
+              <p>HD Stream Quality</p>
+            </div>
+            <div class="stat-item">
+              <h3>Instant</h3>
+              <p>Ticket Delivery</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-banner">
+          <div class="live-badge-glow"><span class="pulse-dot"></span> FEATURED STREAM</div>
+          <img src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&w=1000&q=80" alt="Live Event Stream">
+        </div>
+      </section>
+
+      <!-- Events Catalog Section -->
+      <section id="eventsCatalogSection">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem;">
+          <div>
+            <h2 class="section-title"><i class="fa-solid fa-bolt" style="color: var(--accent-secondary);"></i> Live & Upcoming Events</h2>
+            <p class="section-subtitle" style="margin-bottom: 0;">Discover interactive digital experiences and reserve your seat.</p>
+          </div>
+          <button class="btn btn-outline btn-sm" id="btnRefreshEvents"><i class="fa-solid fa-rotate-right"></i> Refresh List</button>
+        </div>
+
+        <!-- Events Grid -->
+        <div class="events-grid" id="eventsGrid">
+          <!-- Dynamic Event Cards Injected Here -->
+        </div>
+      </section>
+    </div>
+
+    <!-- View 2: My Tickets -->
+    <div id="viewMyTickets" class="app-view" style="display: none;">
+      <h2 class="section-title"><i class="fa-solid fa-ticket" style="color: var(--accent-primary);"></i> My Event Tickets</h2>
+      <p class="section-subtitle">Manage your booked event passes and access live stream links.</p>
+
+      <div id="myTicketsList">
+        <!-- Dynamic Tickets Injected Here -->
+      </div>
+    </div>
+
+    <!-- View 3: Live Stream Player View -->
+    <div id="viewStreamPlayer" class="app-view" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <div>
+          <button class="btn btn-secondary btn-sm" id="btnBackFromStream"><i class="fa-solid fa-arrow-left"></i> Back to My Tickets</button>
+          <h2 class="section-title" id="streamTitle" style="margin-top: 0.5rem;"><i class="fa-solid fa-circle-play" style="color: var(--accent-rose);"></i> Live Event Stream</h2>
+        </div>
+        <div class="live-badge-glow"><span class="pulse-dot"></span> LIVE NOW</div>
+      </div>
+
+      <div class="stream-container" id="streamPlayerWrapper">
+        <iframe id="streamIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+
+      <div class="glass-panel" style="padding: 1.5rem; margin-top: 1rem;">
+        <h3 id="streamEventHeader" style="margin-bottom: 0.5rem;">Event Title</h3>
+        <p id="streamEventDesc" style="color: var(--text-muted);">Event details loading...</p>
+      </div>
+    </div>
+
+    <!-- View 4: Organizer Dashboard -->
+    <div id="viewOrganizer" class="app-view" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+          <h2 class="section-title"><i class="fa-solid fa-chart-line" style="color: var(--accent-cyan);"></i> Organizer Dashboard</h2>
+          <p class="section-subtitle">Create new virtual events and manage your stream settings.</p>
+        </div>
+        <button class="btn btn-primary" id="btnCreateEventModal"><i class="fa-solid fa-plus"></i> Create New Event</button>
+      </div>
+
+      <div class="glass-panel" style="padding: 1.5rem;">
+        <h3 style="margin-bottom: 1rem;">Your Published Events</h3>
+        <div id="organizerEventsList">
+          <!-- Organizer Events Injected Here -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL 1: Sign In -->
+  <div class="modal-overlay" id="modalLogin">
+    <div class="modal-content glass-panel">
+      <button class="modal-close" id="btnCloseLogin">&times;</button>
+      <h2 style="margin-bottom: 0.5rem;"><i class="fa-solid fa-right-to-bracket" style="color: var(--accent-primary);"></i> Welcome Back</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Sign in to access your digital tickets and live streams.</p>
+
+      <form id="formLogin">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="loginEmail" class="form-input" placeholder="user@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Register -->
+  <div class="modal-overlay" id="modalRegister">
+    <div class="modal-content glass-panel">
+      <button class="modal-close" id="btnCloseRegister">&times;</button>
+      <h2 style="margin-bottom: 0.5rem;"><i class="fa-solid fa-user-plus" style="color: var(--accent-secondary);"></i> Create Account</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Join StreamPulse to book tickets and stream live events.</p>
+
+      <form id="formRegister">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" id="regName" class="form-input" placeholder="John Doe" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="regEmail" class="form-input" placeholder="john@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="regPassword" class="form-input" placeholder="At least 6 characters" minlength="6" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Account Role</label>
+          <select id="regRole" class="form-select">
+            <option value="ROLE_ATTENDEE">Attendee (Watch & Book Tickets)</option>
+            <option value="ROLE_ORGANIZER">Organizer (Host & Stream Events)</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fa-solid fa-check"></i> Register Account</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: Create Event (Organizer) -->
+  <div class="modal-overlay" id="modalCreateEvent">
+    <div class="modal-content glass-panel" style="max-width: 600px;">
+      <button class="modal-close" id="btnCloseCreateEvent">&times;</button>
+      <h2 style="margin-bottom: 0.5rem;"><i class="fa-solid fa-calendar-plus" style="color: var(--accent-cyan);"></i> Create Digital Event</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Set up your stream URL, date, pricing, and ticket capacity.</p>
+
+      <form id="formCreateEvent">
+        <div class="form-group">
+          <label class="form-label">Event Title</label>
+          <input type="text" id="eventTitle" class="form-input" placeholder="e.g. Global Tech Summit 2026" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea id="eventDesc" class="form-textarea" rows="3" placeholder="Describe your event content..."></textarea>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Event Date & Time</label>
+            <input type="datetime-local" id="eventDate" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ticket Price ($)</label>
+            <input type="number" step="0.01" min="0" id="eventPrice" class="form-input" value="0.00" required>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Total Seats / Passes</label>
+            <input type="number" min="1" id="eventSeats" class="form-input" value="100" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Stream URL (YouTube/Vimeo Embed link)</label>
+            <input type="url" id="eventStreamUrl" class="form-input" placeholder="https://www.youtube.com/embed/..." required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;"><i class="fa-solid fa-rocket"></i> Publish Event</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
